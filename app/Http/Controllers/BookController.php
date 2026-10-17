@@ -1,36 +1,30 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class BookController extends Controller
 {
     
-    public function index(Request $request)
-    {
-        $genre = $request->query('genre', null);
-        $year = $request->query('year', null);
+   public function index(Request $request)
+   {
+       $genre = $request->query('genre');
+       $year = $request->query('year');
 
-        $books = $this->books();
+       $query = Book::query();
 
-        if ($genre !== null) {
-            $books = array_filter($books, function ($book) use ($genre) {
-                return $book['genre'] === $genre;
-            });
-        }
+     if ($genre !== null) {
+        $query->where('genre', $genre);
+    }
 
-        if ($year !== null) {
-            $books = array_filter($books, function ($book) use ($year) {
-                return $book['year'] == $year;
-            });
-        }
+     if ($year !== null) {
+        $query->where('year', $year);
+    }
 
-        return view('books.index', [
-            'books' => $books,
-            'genre' => $genre,
-            'year' => $year,
-        ]);
+        $books = $query->get();
+
+        return view('books.index', compact('books', 'genre', 'year'));
     }
 
     
@@ -48,21 +42,8 @@ class BookController extends Controller
         'genre' => 'required|in:History,Fiction',
     ]);
 
-        $books = $this->books();
-
-    $newId = empty($books)
-        ? 1
-        : max(array_column($books, 'id')) + 1;
-
-    $books[] = [
-        'id' => $newId,
-        'title' => $validated['title'],
-        'author' => $validated['author'],
-        'year' => $validated['year'],
-        'genre' => $validated['genre'],
-    ];
-
-    $this->saveBooks($books);
+     
+    Book::create($validated);
 
     return redirect()->route('books.index')
         ->with('success', 'Book added successfully!');
@@ -71,13 +52,9 @@ class BookController extends Controller
     
     public function show(string $id)
     {
-        $books = $this->books();
+        $book = Book::findOrFail($id);
 
-        if (!isset($books[$id]))
-        {
-            abort(404);
-        }
-        return view('books.show', ['book' => $books[$id]]);
+        return view('books.show', compact('book'));
     }
     
     public function edit(string $id)
@@ -94,27 +71,14 @@ class BookController extends Controller
     {
         //
     }
-    public function featured()
+   public function featured()
     {
-        $books = $this->books();
-        $book = collect($books)->firstWhere('id', 1);
+         $book = Book::findOrFail(1);
 
-        return view('books.featured', ['book' => $book]);
+        return view('books.featured', compact('book'));
     }
     
-    private function books(){
-        $path = storage_path('app/books.json');
-
-        return json_decode(file_get_contents($path), true);
-    }
-
-    private function saveBooks(array $books)
-    {
-        file_put_contents(
-            storage_path('app/books.json'),
-            json_encode($books, JSON_PRETTY_PRINT)
-        );
-
-    }
+   
+   
 }
 

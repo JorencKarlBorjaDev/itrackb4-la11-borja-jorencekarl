@@ -15,3 +15,17 @@ Lab Activity 7
 2. Laravel automatically stops the process when the validation fails. It sends me back to the form with the errors, so the book is not saved.
 
 3. The success message only appears once because it is stored in the session temporarily. After refreshing or going to another page, the message disappears.
+
+Lab Activity 9
+
+F1. Which column did you make nullable, and why that one and not another?
+
+I made the `genre` column nullable because some books might not have a genre assigned yet. I chose that column because the book can still be saved even if its genre is unknown, while the title and author are important information about the book.
+
+F2. Which step failed first for you, and what did the error say?
+
+The first error I encountered happened when I tried to create a book using Tinker without providing all the required fields. It showed a `NOT NULL constraint failed: books.author` error because I did not provide an author value. Later, I also encountered a mass-assignment error before adding the fields to the `$fillable` property.
+
+F3. You changed no Blade file in Part D, yet your pages still work. Why not?
+
+My Blade files still work because I kept the same view names and variables that the pages already use. I only changed the controller to retrieve the books from the database using the `Book` model instead of reading from the old JSON file.
