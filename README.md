@@ -29,3 +29,11 @@ The first error I encountered happened when I tried to create a book using Tinke
 F3. You changed no Blade file in Part D, yet your pages still work. Why not?
 
 My Blade files still work because I kept the same view names and variables that the pages already use. I only changed the controller to retrieve the books from the database using the `Book` model instead of reading from the old JSON file.
+
+Lab Activity 10
+
+G1. I turned the Genre column into a separate table to avoid repeating genre names and keep the data organized.
+
+G2. Screenshot 6 showed 7 queries because there were 6 books, each requiring a separate genre query, plus 1 query to retrieve the books.
+
+G3. If I made `genre` plural, Laravel would not find the relationship when my code uses `genre`.

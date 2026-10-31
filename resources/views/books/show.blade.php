@@ -17,7 +17,7 @@
 
             <p><strong>Year:</strong> {{ $book['year'] }}</p>
 
-            <p><strong>Genre:</strong> {{ $book['genre'] }}</p>
+            <p><strong>Genre:</strong> {{ $book->genre?->name ?? 'N/A' }}</p>
 
             <p><strong>Name:</strong> Jorence Karl Borja</p>
 

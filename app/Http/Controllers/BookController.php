@@ -3,19 +3,24 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Genre;
+
 
 class BookController extends Controller
 {
     
    public function index(Request $request)
    {
-       $genre = $request->query('genre');
+       $genreId = $request->query('genre_id');
        $year = $request->query('year');
 
-       $query = Book::query();
+       $genres = Genre::all();
+      
+       
+       $query = Book::with('genre');
 
-     if ($genre !== null) {
-        $query->where('genre', $genre);
+     if ($genreId !== null) {
+        $query->where('genre_id', $genreId);
     }
 
      if ($year !== null) {
@@ -24,13 +29,15 @@ class BookController extends Controller
 
         $books = $query->get();
 
-        return view('books.index', compact('books', 'genre', 'year'));
+        return view('books.index', compact('books', 'genreId', 'year', 'genres'));
     }
 
     
     public function create()
     {
-        return view('books.create');
+        $genres = Genre::all();
+
+        return view('books.create', compact('genres'));
     }
     
     public function store(Request $request)
@@ -39,7 +46,8 @@ class BookController extends Controller
         'title' => 'required|max:255',
         'author' => 'required|max:255',
         'year' => 'required|numeric|min:1000|max:2026',
-        'genre' => 'required|in:History,Fiction',
+        'genre_id' => 'required|exists:genres,id',
+        'is_available' => 'required|boolean',
     ]);
 
      
