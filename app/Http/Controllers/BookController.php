@@ -58,28 +58,45 @@ class BookController extends Controller
     }
     
     
-    public function show(string $id)
+    public function show(Book $book)
     {
-        $book = Book::findOrFail($id);
-
         return view('books.show', compact('book'));
     }
     
-    public function edit(string $id)
+
+    public function edit(Book $book)
     {
-        //
+        $genres = Genre::all();
+
+        return view('books.edit', compact('book', 'genres'));
     }
 
-    public function update(Request $request, string $id)
-    {
-        //
-    }
     
-    public function destroy(string $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        $validated = $request->validate([
+        'title' => 'required|max:255',
+        'author' => 'required|max:255',
+        'year' => 'required|numeric|min:1000|max:2026',
+        'genre_id' => 'required|exists:genres,id',
+        'is_available' => 'required|boolean',
+    ]);
+        $book->update($validated);
+
+        return redirect()->route('books.index')
+           ->with('success', 'Book updated successfully!');
     }
-   public function featured()
+
+
+    public function destroy(Book $book)
+    {
+         $book->delete();
+
+        return redirect()->route('books.index');
+    }
+
+    
+    public function featured()
     {
          $book = Book::findOrFail(1);
 

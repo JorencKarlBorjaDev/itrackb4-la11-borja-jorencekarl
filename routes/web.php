@@ -30,5 +30,5 @@ Route::get('/books/filter/{genre?}', function ($genre = null) {
 
 });
 
-Route::resource('books', BookController::class)
-    ->only(['index', 'show', 'create', 'store']);
+Route::resource('books', BookController::class);
+   

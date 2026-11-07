@@ -37,3 +37,11 @@ G1. I turned the Genre column into a separate table to avoid repeating genre nam
 G2. Screenshot 6 showed 7 queries because there were 6 books, each requiring a separate genre query, plus 1 query to retrieve the books.
 
 G3. If I made `genre` plural, Laravel would not find the relationship when my code uses `genre`.
+
+Lab 11
+
+G1. In my project, route model binding needs the route parameter name to match the controller variable and the model to be properly set up. If only one is correct, Laravel may not find the correct book record, and it can return a 404 error.
+
+G2. When I first clicked the Delete link, it opened the Book Information page instead of deleting the book because an HTML link only sends a GET request. My destroy route requires a DELETE request, so I needed to replace the link with a form using `@method('DELETE')`.
+
+G3. In my edit form, I used `old()` with a second argument so the existing book information would still appear when I opened the form. Without the second argument, the fields could become empty, while using only the second argument would not show the new input if validation failed.

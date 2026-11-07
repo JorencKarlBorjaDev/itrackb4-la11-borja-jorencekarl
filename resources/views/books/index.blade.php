@@ -71,7 +71,9 @@
                             <th scope="col" class="py-3">Author</th>
                             <th scope="col" class="py-3">Year</th>
                             <th scope="col" class="py-3">Genre</th>
-                            <th scope="col" class="py-3">Availability</th>
+                            <th scope="col" class="py-3">Actions</th>
+                            <th scope="col" class="py-3">Actions</th>
+
                         </tr>
                     </thead>
 
@@ -112,12 +114,33 @@
                                     @endif
                                 </td>
 
+                                <td>
+                                    <div class="d-flex gap-1">
+
+                                          <a href="{{ route('books.edit', $book->id) }}"
+                                               class="btn btn-warning btn-sm">
+                                            Edit
+                                         </a>
+
+
+                                    <form action="{{ route('books.destroy', $book->id) }}" method="POST"
+                                        onsubmit="return confirm('Delete this record?')">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+
+
+
+                                </td>
                             </tr>
 
                         @empty
 
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">
+                                <td colspan="7" class="text-center py-5 text-muted">
                                     No books are currently available.
                                 </td>
                             </tr>
